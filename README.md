@@ -1,113 +1,92 @@
-# 🤖 AI Job Application Assistant | Gen AI Capstone 2025
-
-This project was built as part of the **Google Gen AI Intensive Capstone 2025**. It showcases how Generative AI can automate the job application process using **Google Gemini Pro**.
-
----
-
-## 🔍 Overview
-
-The **AI Job Application Assistant** helps job seekers streamline their application process by:
-
-- Matching resumes with job descriptions
-- Scoring job-resume compatibility
-- Suggesting customized resume bullet points
-- Auto-generating a personalized cover letter
-- Outputting all data in structured JSON format
-
-All of this is done using **Generative AI prompts and automation**, reducing manual effort while improving quality and personalization.
-
----
-
-## ✨ Key Features
-
-- ✅ Match score calculation between job descriptions and resumes  
-- ✅ AI-generated resume enhancements  
-- ✅ Tailored cover letter creation  
-- ✅ JSON output for use in trackers or dashboards  
-- ✅ Lightweight agent-like logic for step-by-step automation
-
----
-
-## 🧠 GenAI Techniques Used
-
-- **Retrieval-Augmented Generation (RAG-style prompts)**  
-- **Structured Output (JSON formatting)**  
-- **Agent-style Task Automation**  
-- **Few-shot Prompt Engineering**
-- **Grounding**
-- **LOng Context Handling**
-
----
-
-## 🛠 Built With
-
-- Google Gemini Pro (via `google-generativeai` SDK)  
-- Python (Jupyter Notebook / Kaggle)  
-- Markdown, JSON
-
----
-
-## 🚀 Setup & Usage
-
-### 1. Install dependencies
-
-```bash
-pip install google-generativeai
-```
-## 2. Set your Google API key
-
-import google.generativeai as genai
-genai.configure(api_key="your_google_api_key_here")
-
-## 3. Run the notebook
-
-Follow the code steps to input your resume and a job description. The model will generate match insights, JSON data, and a custom cover letter.
-
-## 📁 Project Structure
-
-AI-Job-Application-Assistant/
+🚀 GEN-AI Capstone Project
+A complete end-to-end Gen-AI Application built using Python, FastAPI/Flask (Backend) and React/Next.js (Frontend).
+This project integrates LLMs, RAG (Retrieval Augmented Generation), vector embeddings, and Groq API to deliver intelligent responses based on uploaded content/documents.
+🔥 Project Features
+🧠 AI Features
+LLM-powered chatbot using Groq API / Llama / Mixtral
+RAG pipeline using vector embedding + similarity search
+Supports document-based Q&A
+Context-aware, accurate responses
+Fast inference with Groq’s low-latency API
+📂 Backend (Python)
+FastAPI/Flask server
+Embedding generation
+Vector database integration (FAISS / Chroma)
+API endpoints:
+/upload – upload documents
+/process – embed + index
+/ask – query the model
+Environment variables stored in .env
+Secure secret handling (Git ignored)
+🖥 Frontend
+Modern UI (React / HTML / CSS / Bootstrap / Tailwind)
+Chat interface with user & bot messages
+File upload interface
+Loading animation for AI responses
+Error handling + validations
+🧑‍💻 Tech Stack
+Component	Technology
+Frontend	ReactJS / HTML / CSS / JavaScript
+Backend	Python, FastAPI/Flask
+AI API	Groq API (Llama / Mixtral models)
+Vector DB	FAISS / Chroma
+Embeddings	SentenceTransformers / HuggingFace
+Version Control	Git & GitHub
+📁 Project Structure
+GEN-AI-CAPSTONE-PROJECT/
+│
+├── backend/
+│   ├── app.py (main backend file)
+│   ├── rag_engine.py
+│   ├── vector_db/
+│   ├── uploads/
+│   ├── .env (ignored)
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
 ├── README.md
-
-├── Capstone_Notebook.ipynb
-
-├── assets/
-
-│   └── thumbnail.png
-
-└── examples/
-
-    └── sample_outputs.json
-
-## 📹 Demo & Blog
-
-   📖 Blog Post: [Read on Medium](https://medium.com/@bethusreeja/automating-job-applications-with-gen-ai-my-google-capstone-project-using-gemini-pro-701e31745a9e)
-
-   🎥 Video Demo:[Watch on YouTube](https://www.youtube.com/watch?v=olx944mnz5U)
-
-  📓 Kaggle Notebook:[View on Kaggle](https://www.kaggle.com/code/sreejab22/gen-ai-job-application-assistant)
-
-## 📈 Future Enhancements
-
-  LinkedIn/Indeed job scraping
-
-  Google Sheets integration for tracking
-
-  Gmail API for auto-sending applications
-
-  Streamlit-based UI for broader use
-
-🙌 Acknowledgments
-
-Thanks to the Google Gen AI Intensive Team, Kaggle, and the amazing GenAI community!
-
-
-## 📜 License
-
-This project is licensed under the MIT License.
-
-Note: You're free to use, share, and adapt this project with proper credit. Please do not rebrand, resell, or redistribute modified versions without clear attribution to the original author.
-
-© 2025 Sreeja Bethu. All rights reserved.
-
-
-
+└── .gitignore
+⚙️ Setup Instructions
+1️⃣ Clone the Repo
+git clone https://github.com/jasleenkalsi13/GEN-AI-CAPSTONE-PROJECT.git
+cd GEN-AI-CAPSTONE-PROJECT
+🖥 Backend Setup
+2️⃣ Create Virtual Environment
+cd backend
+python3 -m venv venv
+source venv/bin/activate   # Mac/Linux
+3️⃣ Install Requirements
+pip install -r requirements.txt
+4️⃣ Create .env File
+Create a .env inside backend/:
+GROQ_API_KEY=your_api_key_here
+MODEL_NAME=llama-3.1
+5️⃣ Run Backend
+python app.py
+Backend will start at:
+http://localhost:5000
+🌐 Frontend Setup
+cd frontend
+npm install
+npm start
+Frontend runs at:
+http://localhost:3000
+🧪 How to Use
+Start backend
+Start frontend
+Upload your documents (PDF/TXT)
+Ask questions in the chatbot
+AI will respond using your uploaded content (RAG)
+🛡️ Security Notes
+.env file is ignored using .gitignore
+Do NOT upload API keys to GitHub
+Regenerate your Groq API key if previously exposed
+🤝 Contributing
+Pull requests are welcome!
+Feel free to open issues or suggest enhancements.
+⭐ Show Your Support
+If this project helped you, please star the repository ⭐ on GitHub!
