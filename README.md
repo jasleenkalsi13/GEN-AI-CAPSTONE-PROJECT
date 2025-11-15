@@ -106,8 +106,10 @@ curl -X POST "http://127.0.0.1:8000/chat/query" \
   -d '{"question":"How to improve my resume?"}'
 🎨 Screenshots (Add your own)
 Add UI screenshots here:
-/frontend/screenshots/resume_page.png
-/frontend/screenshots/chat_page.png
+<img width="1000" height="535" alt="image" src="https://github.com/user-attachments/assets/63ef60e9-d7c9-4f2d-9853-25027b04aa6c" />
+<img width="997" height="522" alt="image" src="https://github.com/user-attachments/assets/5cfd684c-b775-4e53-981d-9ef8e0febe43" />
+<img width="1016" height="631" alt="image" src="https://github.com/user-attachments/assets/27131a12-6a80-4933-a395-8cda2b30ae81" />
+
 🏁 Final Notes
 ✔ Fully functional AI Job Assistant
 ✔ Beautiful dashboard UI
