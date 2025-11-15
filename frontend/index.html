@@ -1,35 +1,230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Gen-AI Job Assistant</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GEN‑AI Job Assistant — Dashboard</title>
+
+  <style>
+    /* -- Reset + base -- */
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa7bf; --accent:#6ee7b7; --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,'Helvetica Neue',Arial;color:#e6eef8;background:linear-gradient(180deg,#071226 0%, #071a2a 100%);min-height:100vh}
+
+    /* layout */
+    .container{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:28px;max-width:1200px;margin:24px auto}
+    .sidebar{background:linear-gradient(180deg,var(--card), #071429);border-radius:14px;padding:18px;box-shadow:0 6px 30px rgba(2,6,23,0.6)}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#34d399);display:flex;align-items:center;justify-content:center;color:#052024;font-weight:700}
+    .brand h3{margin:0;font-size:16px}
+    .nav{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .nav button{background:transparent;border:none;color:var(--muted);text-align:left;padding:10px;border-radius:8px;cursor:pointer}
+    .nav button.active{background:var(--glass);color:#dffbf0}
+
+    /* main */
+    .main{padding:6px}
+    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .header h2{margin:0}
+
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .card{background:linear-gradient(180deg,var(--glass),var(--glass-2));padding:18px;border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.02), 0 6px 20px rgba(2,6,23,0.5)}
+    .card h3{margin:0 0 8px 0}
+
+    /* resume */
+    .file-row{display:flex;gap:12px;align-items:center}
+    .file-row input[type=file]{background:transparent;color:var(--muted)}
+    .btn{background:linear-gradient(90deg,var(--accent),#3b82f6);padding:8px 12px;border-radius:8px;border:none;color:#052024;font-weight:600;cursor:pointer}
+
+    /* jobmatch */
+    textarea{width:100%;min-height:120px;padding:10px;border-radius:8px;border:none;background:rgba(255,255,255,0.02);color:#e6eef8}
+
+    /* chat */
+    .chat-window{height:360px;overflow:auto;padding:12px;background:rgba(0,0,0,0.25);border-radius:10px;display:flex;flex-direction:column;gap:12px}
+    .bubble{max-width:70%;padding:10px 12px;border-radius:12px}
+    .user{align-self:flex-end;background:linear-gradient(90deg,#2dd4bf,#60a5fa);color:#022; border-bottom-right-radius:4px}
+    .bot{align-self:flex-start;background:rgba(255,255,255,0.02);color:var(--muted);border-bottom-left-radius:4px}
+
+    .footer-row{display:flex;gap:8px;margin-top:10px}
+    .input{flex:1;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:#e6eef8}
+
+    /* responsive */
+    @media (max-width:900px){.container{grid-template-columns:1fr;padding:12px}.grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
 
-    <h1>Gen-AI Job Application Assistant</h1>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">GA</div>
+        <div>
+          <h3>Gen‑AI Job Assistant</h3>
+          <div style="font-size:12px;color:var(--muted)">Dashboard</div>
+        </div>
+      </div>
 
-    <section class="box">
-        <h2>Upload Resume</h2>
-        <input type="file" id="resumeFile" />
-        <button onclick="uploadResume()">Upload</button>
-        <p id="resumeResult"></p>
-    </section>
+      <nav class="nav">
+        <button id="navResume" class="active" onclick="show('resume')">Resume Upload</button>
+        <button id="navJob" onclick="show('job')">Job Match</button>
+        <button id="navChat" onclick="show('chat')">Chat Assistant</button>
+      </nav>
 
-    <section class="box">
-        <h2>Job Description</h2>
-        <textarea id="jobDescription" placeholder="Paste Job Description..."></textarea>
-        <button onclick="matchJob()">Match Job</button>
-        <p id="jobMatchResult"></p>
-    </section>
+      <div style="margin-top:20px;color:var(--muted);font-size:13px">Backend: <span id="backendStatus">Checking...</span></div>
+    </aside>
 
-    <section class="box">
-        <h2>Chat with Assistant</h2>
-        <textarea id="chatInput" placeholder="Ask something..."></textarea>
-        <button onclick="sendChat()">Send</button>
-        <p id="chatResponse"></p>
-    </section>
+    <!-- Main -->
+    <main class="main">
+      <div class="header">
+        <h2 id="pageTitle">Resume Upload</h2>
+        <div style="color:var(--muted);font-size:14px">You are connected locally</div>
+      </div>
 
-<script src="script.js"></script>
+      <div class="grid">
+        <!-- Resume Card -->
+        <section id="cardResume" class="card">
+          <h3>Upload Resume</h3>
+          <div class="file-row">
+            <input id="resumeFile" type="file" accept=".pdf,.doc,.docx,.txt" />
+            <button class="btn" onclick="uploadResume()">Upload</button>
+          </div>
+          <div style="margin-top:12px;color:var(--muted)" id="resumeResult">No uploads yet.</div>
+        </section>
+
+        <!-- Job Match Card -->
+        <section id="cardJob" class="card" style="display:none">
+          <h3>Job Description & Match</h3>
+          <textarea id="jobDescription" placeholder="Paste the job description here..."></textarea>
+          <div style="display:flex;justify-content:space-between;margin-top:10px;align-items:center">
+            <div style="color:var(--muted);font-size:13px">Use the sample JD or paste your own.</div>
+            <button class="btn" onclick="matchJob()">Match Job</button>
+          </div>
+          <div style="margin-top:12px;color:var(--muted)" id="jobMatchResult">No matches yet.</div>
+        </section>
+
+        <!-- Chat Card (large) -->
+        <section id="cardChat" class="card" style="display:none;grid-column:1 / -1">
+          <h3>Chat Assistant</h3>
+          <div class="chat-window" id="chatWindow"></div>
+
+          <div class="footer-row">
+            <input id="chatInput" class="input" placeholder="Type your question..." />
+            <button class="btn" onclick="sendChat()">Send</button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ---------- Configuration ----------
+    const BASE_URL = "http://127.0.0.1:8000"; // change if your backend runs elsewhere
+
+    // ----------------- UI helpers -----------------
+    function show(panel){
+      document.getElementById('cardResume').style.display = panel==='resume' ? 'block' : 'none';
+      document.getElementById('cardJob').style.display = panel==='job' ? 'block' : 'none';
+      document.getElementById('cardChat').style.display = panel==='chat' ? 'block' : 'none';
+
+      document.getElementById('navResume').classList.toggle('active', panel==='resume');
+      document.getElementById('navJob').classList.toggle('active', panel==='job');
+      document.getElementById('navChat').classList.toggle('active', panel==='chat');
+
+      const titles = {resume: 'Resume Upload', job: 'Job Match', chat: 'Chat Assistant'};
+      document.getElementById('pageTitle').innerText = titles[panel];
+    }
+
+    function addBubble(text, who='bot'){
+      const w = document.getElementById('chatWindow');
+      const el = document.createElement('div');
+      el.className = 'bubble ' + (who==='user' ? 'user' : 'bot');
+      el.innerText = text;
+      w.appendChild(el);
+      w.scrollTop = w.scrollHeight;
+    }
+
+    // ----------------- Health check -----------------
+    async function checkBackend(){
+      try{
+        const res = await fetch(BASE_URL + '/');
+        if(res.ok){
+          document.getElementById('backendStatus').innerText = 'UP';
+        } else document.getElementById('backendStatus').innerText = 'Responding';
+      }catch(e){
+        document.getElementById('backendStatus').innerText = 'DOWN';
+      }
+    }
+    checkBackend();
+
+    // ----------------- API calls -----------------
+    async function uploadResume(){
+      const fileInput = document.getElementById('resumeFile');
+      if(!fileInput.files.length){
+        document.getElementById('resumeResult').innerText = 'Please choose a resume file first.';
+        return;
+      }
+      const file = fileInput.files[0];
+      const form = new FormData();
+      form.append('file', file);
+
+      document.getElementById('resumeResult').innerText = 'Uploading...';
+
+      try{
+        const res = await fetch(`${BASE_URL}/resume/upload`, {method:'POST',body:form});
+        const data = await res.json();
+        if(res.ok){
+          document.getElementById('resumeResult').innerText = data.summary || 'Upload complete.';
+        } else {
+          document.getElementById('resumeResult').innerText = data.error || 'Upload failed';
+        }
+      }catch(err){
+        document.getElementById('resumeResult').innerText = 'Network error: ' + err.message;
+      }
+    }
+
+    async function matchJob(){
+      const jd = document.getElementById('jobDescription').value.trim();
+      if(!jd){document.getElementById('jobMatchResult').innerText = 'Paste a job description first.';return}
+      document.getElementById('jobMatchResult').innerText = 'Matching...';
+      try{
+        const res = await fetch(`${BASE_URL}/jobmatch/match`,{
+          method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_description:jd})
+        });
+        const data = await res.json();
+        if(res.ok){
+          document.getElementById('jobMatchResult').innerText = data.match_result || 'No match returned.';
+        } else document.getElementById('jobMatchResult').innerText = data.error || 'Matching failed.';
+      }catch(err){
+        document.getElementById('jobMatchResult').innerText = 'Network error: ' + err.message;
+      }
+    }
+
+    async function sendChat(){
+      const q = document.getElementById('chatInput').value.trim();
+      if(!q) return;
+      addBubble(q,'user');
+      document.getElementById('chatInput').value = '';
+
+      try{
+        const res = await fetch(`${BASE_URL}/chat/query`,{
+          method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})
+        });
+        const data = await res.json();
+        if(res.ok){
+          addBubble(data.answer || data.response || 'No reply');
+        } else addBubble(data.error || 'Server error');
+      }catch(err){
+        addBubble('Network error: ' + err.message);
+      }
+    }
+
+    // keyboard send
+    document.addEventListener('keydown', (e)=>{if(e.key === 'Enter' && document.activeElement.id==='chatInput'){sendChat()}})
+  </script>
 </body>
 </html>
+
