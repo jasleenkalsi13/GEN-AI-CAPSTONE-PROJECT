@@ -2,35 +2,20 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from groq import Groq
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 router = APIRouter()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-class JobMatchRequest(BaseModel):
-    resume_text: str
+class JobRequest(BaseModel):
     job_description: str
 
 @router.post("/match")
-async def match_job(req: JobMatchRequest):
-
+async def match_job(req: JobRequest):
     prompt = f"""
-    You are an ATS Job Matching Agent.
-    Compare the resume with the job description and return ONLY JSON.
+    Analyze this job description and return a short summary
+    and required skills:
 
-    Resume:
-    {req.resume_text}
-
-    Job Description:
     {req.job_description}
-
-    Return JSON:
-    - match_score (0-100)
-    - missing_skills (list)
-    - matching_skills (list)
-    - how_to_improve (list)
     """
 
     response = client.chat.completions.create(
@@ -39,4 +24,4 @@ async def match_job(req: JobMatchRequest):
     )
 
     result = response.choices[0].message.content
-    return {"job_match": result}
+    return {"match_result": result}
