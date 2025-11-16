@@ -111,7 +111,7 @@ Add UI screenshots here:
 <img width="1016" height="631" alt="image" src="https://github.com/user-attachments/assets/27131a12-6a80-4933-a395-8cda2b30ae81" />
 DEMO:
 Dataset on Kaggle-https://www.kaggle.com/datasets/jasleenkaurkalsi/gen-ai-capstone-project
-video demo - https://youtu.be/R9Hh1hmEnoA
+video demo - https://youtu.be/KFQzZRYg8Ts?si=yhUZr8qFGMKFbiAq
 🏁 Final Notes
 ✔ Fully functional AI Job Assistant
 ✔ Beautiful dashboard UI
